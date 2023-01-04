@@ -1,23 +1,18 @@
 from typing import Union
 
-from fastapi import FastAPI
-
-from dotenv import load_dotenv
-import os
-load_dotenv()
+from fastapi import FastAPI,Depends
+from sqlalchemy.orm import Session
+from database import engine
+from depens import get_db
+import models
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-DB_USER = os.environ.get('DB_USER')
-DB_PASSWORD = os.environ.get('DB_PASSWORD')
-DB_HOST = os.environ.get('DB_HOST')
-DB_SCHEMA = os.environ.get('DB_SCHEMA')
-DB_PORT = os.environ.get('DB_PORT')
-
-DB_URL = 'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_SCHEMA}'
 @app.get("/")
-def read_root():
-    mySecret = os.environ.get('MySecret')
+def read_root(db: Session = Depends(get_db)):
+    a = db.query(models.User).filter(models.User.id == user_id).first()
+    print(a)
     return {"Hello": "123"}
 
 
