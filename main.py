@@ -13,6 +13,7 @@ app = FastAPI()
 def read_root(db: Session = Depends(get_db)):
     a = db.query(models.User).filter(models.User.id == user_id).first()
     print(a)
+    print('aa')
     return {"Hello": "123"}
 
 
